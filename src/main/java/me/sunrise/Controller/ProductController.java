@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
@@ -51,10 +52,25 @@ public class ProductController {
         return productInfo;
     }
 
+//    @PostMapping("/seller/product/new")
+//    public ResponseEntity<?> add(@RequestBody ProductEnity product) {
+//        try {
+//            ProductEnity returnedProduct = productService.save(product);
+//            System.out.println("dsfs"+ returnedProduct);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
     @PostMapping("/seller/product/new")
     public ResponseEntity<?> add(@RequestBody ProductEnity product) {
+        System.out.println(product.toString());
         try {
+            String uniqueID = UUID.randomUUID().toString();
+            product.setProductId(uniqueID);
             ProductEnity returnedProduct = productService.save(product);
+            System.out.println("dsfs" + returnedProduct);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -82,35 +98,44 @@ public class ProductController {
     }
 
 
-
     @GetMapping("/product/under25")
     public Page<ProductEnity> under25(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                       @RequestParam(value = "size", defaultValue = "3") Integer size) {
         PageRequest request = PageRequest.of(page - 1, size);
         return productService.under25(request);
     }
+
     @GetMapping("/product/from25to50")
     public Page<ProductEnity> from25to50(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                          @RequestParam(value = "size", defaultValue = "3") Integer size) {
         PageRequest request = PageRequest.of(page - 1, size);
         return productService.from25to50(request);
     }
+
     @GetMapping("/product/from50to100")
     public Page<ProductEnity> from50to100(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                           @RequestParam(value = "size", defaultValue = "3") Integer size) {
         PageRequest request = PageRequest.of(page - 1, size);
         return productService.from50to100(request);
     }
+
     @GetMapping("/product/from100to200")
     public Page<ProductEnity> from100to200(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                            @RequestParam(value = "size", defaultValue = "3") Integer size) {
         PageRequest request = PageRequest.of(page - 1, size);
         return productService.from100to200(request);
-    }@GetMapping("/product/above200")
+    }
+
+    @GetMapping("/product/above200")
     public Page<ProductEnity> above200(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                        @RequestParam(value = "size", defaultValue = "3") Integer size) {
         PageRequest request = PageRequest.of(page - 1, size);
         return productService.above200(request);
+    }
+
+    @PostMapping("/product/status")
+    public boolean changeStatus(@RequestParam String productId, @RequestParam Integer status) {
+        return productService.changeStatus(productId, status);
     }
 
 }

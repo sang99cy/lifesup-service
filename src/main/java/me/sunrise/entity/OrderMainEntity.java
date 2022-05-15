@@ -31,15 +31,14 @@ public class OrderMainEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "orderMain")
-    private Set<ProductInOrderEntity> products = new HashSet<>();
+//    @OneToMany(cascade = CascadeType.ALL,
+//            fetch = FetchType.LAZY,
+//            mappedBy = "orderMain")
+//    private Set<ProductInOrderEntity> products = new HashSet<>();
 
     @NotEmpty
     private String buyerEmail;
 
-    @NotEmpty
     private String buyerName;
 
     @NotEmpty
@@ -61,14 +60,17 @@ public class OrderMainEntity implements Serializable {
     @UpdateTimestamp
     private LocalDateTime updateTime;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     public OrderMainEntity(UserEntity buyer) {
         this.buyerEmail = buyer.getEmail();
         this.buyerName = buyer.getName();
         this.buyerPhone = buyer.getPhone();
         this.buyerAddress = buyer.getAddress();
-        this.orderAmount = buyer.getCart().getProducts().stream().map(item -> item.getProductPrice().multiply(new BigDecimal(item.getCount())))
-                .reduce(BigDecimal::add)
-                .orElse(new BigDecimal(0));
+//        this.orderAmount = buyer.getCart().getProducts().stream().map(item -> item.getProductPrice().multiply(new BigDecimal(item.getCount())))
+//                .reduce(BigDecimal::add)
+//                .orElse(new BigDecimal(0));
         this.orderStatus = 0;
 
     }

@@ -163,13 +163,13 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(orderMain);
 
         // Restore Stock
-        Iterable<ProductInOrderEntity> products = orderMain.getProducts();
-        for(ProductInOrderEntity productInOrder : products) {
-            ProductEnity productInfo = productInfoRepository.findByProductId(productInOrder.getProductId());
-            if(productInfo != null) {
-                productService.increaseStock(productInOrder.getProductId(), productInOrder.getCount());
-            }
-        }
+//        Iterable<ProductInOrderEntity> products = orderMain.getProducts();
+//        for(ProductInOrderEntity productInOrder : products) {
+//            ProductEnity productInfo = productInfoRepository.findByProductId(productInOrder.getProductId());
+//            if(productInfo != null) {
+//                productService.increaseStock(productInOrder.getProductId(), productInOrder.getCount());
+//            }
+//        }
         return orderRepository.findByOrderId(orderId);
 
     }

@@ -1,6 +1,7 @@
 package me.sunrise.Controller;
 
 
+import me.sunrise.dto.OrderDTO;
 import me.sunrise.entity.Cart;
 import me.sunrise.entity.ProductInOrderEntity;
 import me.sunrise.entity.ProductEnity;
@@ -79,11 +80,16 @@ public class CartController {
     }
 
 
+//    @PostMapping("/checkout")
+//    public ResponseEntity checkout(Principal principal) {
+//        UserEntity UserEntity = userService.findOne(principal.getName());// Email as username
+//        cartService.checkout(UserEntity);
+//        return ResponseEntity.ok(null);
+//    }
+
     @PostMapping("/checkout")
-    public ResponseEntity checkout(Principal principal) {
-        UserEntity UserEntity = userService.findOne(principal.getName());// Email as username
-        cartService.checkout(UserEntity);
-        return ResponseEntity.ok(null);
+    public void checkout(@RequestBody OrderDTO orderDTO){
+        productInOrderService.checkout(orderDTO);
     }
 
     @PostMapping("/productInOrder")

@@ -18,25 +18,27 @@ import java.util.Objects;
 public class ProductInOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    @JsonIgnore
-    private OrderMainEntity orderMain;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "order_id")
+//    @JsonIgnore
+//    private OrderMainEntity orderMain;
 
-    @NotEmpty
+    @Column(name = "order_id")
+    private Long orderId;
+
     private String productId;
 
 //    @Column(name = "cart_user_id")
 //    private Integer cartUserId;
 
-    @NotEmpty
     private String productName;
 
 

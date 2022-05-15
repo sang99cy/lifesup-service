@@ -1,7 +1,11 @@
 package me.sunrise.service.impl;
 
+import me.sunrise.dto.DetailOrderDTO;
+import me.sunrise.dto.OrderDTO;
+import me.sunrise.entity.OrderMainEntity;
 import me.sunrise.entity.ProductInOrderEntity;
 import me.sunrise.entity.UserEntity;
+import me.sunrise.repository.OrderRepository;
 import me.sunrise.repository.ProductInOrderRepository;
 import me.sunrise.service.ProductInOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,27 +17,29 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-public class ProductInOrderServiceImpl implements ProductInOrderService {
+public class ProductInOrderServiceImpl extends BaseService implements ProductInOrderService {
 
     @Autowired
     ProductInOrderRepository productInOrderRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     @Override
     @Transactional
     public void update(String itemId, Integer quantity, UserEntity UserEntity) {
-        Optional<ProductInOrderEntity> op = UserEntity.getCart().getProducts().stream().filter(e -> itemId.equals(e.getProductId())).findFirst();
-        op.ifPresent(productInOrder -> {
-            productInOrder.setCount(quantity);
-            productInOrderRepository.save(productInOrder);
-        });
+//        Optional<ProductInOrderEntity> op = UserEntity.getCart().getProducts().stream().filter(e -> itemId.equals(e.getProductId())).findFirst();
+//        op.ifPresent(productInOrder -> {
+//            productInOrder.setCount(quantity);
+//            productInOrderRepository.save(productInOrder);
+//        });
 
     }
 
     @Override
     public ProductInOrderEntity findOne(String itemId, UserEntity UserEntity) {
-        Optional<ProductInOrderEntity> op = UserEntity.getCart().getProducts().stream().filter(e -> itemId.equals(e.getProductId())).findFirst();
+//        Optional<ProductInOrderEntity> op = UserEntity.getCart().getProducts().stream().filter(e -> itemId.equals(e.getProductId())).findFirst();
         AtomicReference<ProductInOrderEntity> res = new AtomicReference<>();
-        op.ifPresent(res::set);
+//        op.ifPresent(res::set);
         return res.get();
     }
 
@@ -41,6 +47,20 @@ public class ProductInOrderServiceImpl implements ProductInOrderService {
     public void saveProductInOrder(List<ProductInOrderEntity> productInOrder) {
         for (ProductInOrderEntity entity : productInOrder) {
             productInOrderRepository.save(entity);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void checkout(OrderDTO orderDTO) {
+        OrderMainEntity order = super.map(orderDTO,OrderMainEntity.class);
+        OrderMainEntity orderMainEntity = orderRepository.save(order);
+        if (orderMainEntity.getOrderId() != null) {
+            // luu detail order
+            for (DetailOrderDTO detailOrderDTO : orderDTO.getDetailOrders()) {
+                detailOrderDTO.setOrderId(orderMainEntity.getOrderId());
+                productInOrderRepository.save(super.map(detailOrderDTO, ProductInOrderEntity.class));
+            }
         }
     }
 }

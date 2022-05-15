@@ -13,6 +13,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -23,15 +24,16 @@ public class ProductEnity implements Serializable {
     @Id
     private String productId;
 
-    @NotNull
+
     private String productName;
 
-    @NotNull
+
     private BigDecimal productPrice;
 
-    @NotNull
+
     @Min(0)
     private Integer productStock;
+
 
     private String productDescription;
 
@@ -44,9 +46,9 @@ public class ProductEnity implements Serializable {
     private Integer categoryType;
 
     @CreationTimestamp
-    private Date createTime;
+    private LocalDateTime createTime;
     @UpdateTimestamp
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     public ProductEnity() {
     }

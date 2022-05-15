@@ -46,5 +46,5 @@ public interface ProductService {
 
     void delete(String productId);
 
-
+    boolean changeStatus(String productId,Integer status);
 }

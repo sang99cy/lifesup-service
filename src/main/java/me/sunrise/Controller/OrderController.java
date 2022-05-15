@@ -18,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 
 @RestController
@@ -30,6 +31,11 @@ public class OrderController {
     @Autowired
     OrderRepository orderRepository;
 
+    @GetMapping("/orders")
+    public List<OrderMainEntity> orderList() {
+        return  orderRepository.findAll();
+    }
+
     @GetMapping("/order")
     public Page<OrderMainEntity> orderList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                            @RequestParam(value = "size", defaultValue = "10") Integer size,
@@ -41,6 +47,7 @@ public class OrderController {
         } else {
             orderPage = orderService.findAll(request);
         }
+        orderPage = orderService.findAll(request);
         return orderPage;
     }
 
@@ -92,7 +99,7 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Collection<ProductInOrderEntity> items = orderMain.getProducts();
+        //Collection<ProductInOrderEntity> items = orderMain.getProducts();
         return ResponseEntity.ok(orderMain);
     }
 

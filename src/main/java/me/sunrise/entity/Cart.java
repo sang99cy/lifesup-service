@@ -25,16 +25,15 @@ public class Cart implements Serializable {
 //    @JoinColumn(name = "email", referencedColumnName = "email")
     private UserEntity user;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, orphanRemoval = true,
-            mappedBy = "orderMain")
-    private Set<ProductInOrderEntity> products = new HashSet<>();
+//    @OneToMany(cascade = CascadeType.ALL,
+//            fetch = FetchType.LAZY, orphanRemoval = true,
+//            mappedBy = "orderMain")
+//    private Set<ProductInOrderEntity> products = new HashSet<>();
 
     @Override
     public String toString() {
         return "Cart{" +
                 "cartId=" + cartId +
-                ", products=" + products +
                 '}';
     }
 

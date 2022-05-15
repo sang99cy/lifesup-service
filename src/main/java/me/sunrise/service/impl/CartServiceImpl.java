@@ -46,17 +46,17 @@ public class CartServiceImpl implements CartService {
     public void mergeLocalCart(Collection<ProductInOrderEntity> productInOrders, UserEntity user) {
         Cart finalCart = user.getCart();
         productInOrders.forEach(productInOrder -> {
-            Set<ProductInOrderEntity> set = finalCart.getProducts();
-            Optional<ProductInOrderEntity> old = set.stream().filter(e -> e.getProductId().equals(productInOrder.getProductId())).findFirst();
-            ProductInOrderEntity prod;
-            if (old.isPresent()) {
-                prod = old.get();
-                prod.setCount(productInOrder.getCount() + prod.getCount());
-            } else {
-                prod = productInOrder;
+//            Set<ProductInOrderEntity> set = finalCart.getProducts();
+//            Optional<ProductInOrderEntity> old = set.stream().filter(e -> e.getProductId().equals(productInOrder.getProductId())).findFirst();
+            ProductInOrderEntity prod = null;
+//            if (old.isPresent()) {
+//                prod = old.get();
+//                prod.setCount(productInOrder.getCount() + prod.getCount());
+//            } else {
+//                prod = productInOrder;
 //                prod.setCart(finalCart);
-                finalCart.getProducts().add(prod);
-            }
+//                finalCart.getProducts().add(prod);
+//            }
             productInOrderRepository.save(prod);
         });
         cartRepository.save(finalCart);
@@ -66,11 +66,11 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public void delete(String itemId, UserEntity user) {
-        Optional<ProductInOrderEntity> op = user.getCart().getProducts().stream().filter(e -> itemId.equals(e.getProductId())).findFirst();
-        op.ifPresent(productInOrder -> {
-//            productInOrder.setCart(null);
-            productInOrderRepository.deleteById(productInOrder.getId());
-        });
+//        Optional<ProductInOrderEntity> op = user.getCart().getProducts().stream().filter(e -> itemId.equals(e.getProductId())).findFirst();
+//        op.ifPresent(productInOrder -> {
+////            productInOrder.setCart(null);
+//            productInOrderRepository.deleteById(productInOrder.getId());
+//        });
     }
 
     @Override
@@ -81,11 +81,11 @@ public class CartServiceImpl implements CartService {
         orderRepository.save(order);
 
         // clear cart's foreign key & set order's foreign key& decrease stock
-        user.getCart().getProducts().forEach(productInOrder -> {
-//            productInOrder.setCart(null);
-            productInOrder.setOrderMain(order);
-            productService.decreaseStock(productInOrder.getProductId(), productInOrder.getCount());
-            productInOrderRepository.save(productInOrder);
-        });
+//        user.getCart().getProducts().forEach(productInOrder -> {
+////            productInOrder.setCart(null);
+//            //productInOrder.setOrderMain(order);
+//            productService.decreaseStock(productInOrder.getProductId(), productInOrder.getCount());
+//            productInOrderRepository.save(productInOrder);
+//        });
     }
 }

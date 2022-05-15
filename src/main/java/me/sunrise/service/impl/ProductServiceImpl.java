@@ -26,23 +26,28 @@ public class ProductServiceImpl implements ProductService {
     CategoryService categoryService;
 
 
-
     @Override
-    public Page<ProductEnity>under25(Pageable pageable) {
+    public Page<ProductEnity> under25(Pageable pageable) {
         return productInfoRepository.under25(pageable);
     }
+
     @Override
-    public Page<ProductEnity>from25to50(Pageable pageable) {
+    public Page<ProductEnity> from25to50(Pageable pageable) {
         return productInfoRepository.from25to50(pageable);
     }
+
     @Override
-    public Page<ProductEnity>from50to100(Pageable pageable) {
+    public Page<ProductEnity> from50to100(Pageable pageable) {
         return productInfoRepository.from50to100(pageable);
-    } @Override
-    public Page<ProductEnity>from100to200(Pageable pageable) {
+    }
+
+    @Override
+    public Page<ProductEnity> from100to200(Pageable pageable) {
         return productInfoRepository.from100to200(pageable);
-    } @Override
-    public Page<ProductEnity>above200(Pageable pageable) {
+    }
+
+    @Override
+    public Page<ProductEnity> above200(Pageable pageable) {
         return productInfoRepository.above200(pageable);
     }
 
@@ -56,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductEnity> findUpAll(Pageable pageable) {
-        return productInfoRepository.findAllByProductStatusOrderByProductIdAsc(ProductStatusEnum.UP.getCode(),pageable);
+        return productInfoRepository.findAllByProductStatusOrderByProductIdAsc(ProductStatusEnum.UP.getCode(), pageable);
     }
 
     @Override
@@ -132,10 +137,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductEnity update(ProductEnity productInfo) {
 
         // if null throw exception
-        categoryService.findByCategoryType(productInfo.getCategoryType());
-        if(productInfo.getProductStatus() > 1) {
-            throw new MyException(ResultEnum.PRODUCT_STATUS_ERROR);
-        }
+//        categoryService.findByCategoryType(productInfo.getCategoryType());
+//        if(productInfo.getProductStatus() > 1) {
+//            throw new MyException(ResultEnum.PRODUCT_STATUS_ERROR);
+//        }
         return productInfoRepository.save(productInfo);
     }
 
@@ -152,6 +157,14 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-
-
+    @Override
+    public boolean changeStatus(String productId, Integer status) {
+        ProductEnity productInfo = productInfoRepository.findByProductId(productId);
+        if (productInfo != null) {
+            productInfo.setProductStatus(status);
+            productInfoRepository.save(productInfo);
+            return true;
+        }
+        return false;
+    }
 }

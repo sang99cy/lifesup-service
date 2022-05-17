@@ -43,6 +43,7 @@ public class CategoryController {
 
         return categoryPage;
     }
+
     @GetMapping("/categories")
     public List<CategoryEntity> orderList() {
         return categoryService.listAllCategory();
@@ -108,12 +109,12 @@ public class CategoryController {
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + categoryId));
 
         employee.setCategoryName(employeeDetails.getCategoryName());
-        employee.setCategoryType(employeeDetails.getCategoryType());
+//        employee.setCategoryType(employeeDetails.getCategoryType());
         final CategoryEntity updatedEmployee = categoryRepository.save(employee);
         return ResponseEntity.ok(updatedEmployee);
     }
 
-    @GetMapping("/categoryy/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     public CategoryEntity showOne(@PathVariable("categoryId") Integer categoryId) {
 
         CategoryEntity category = categoryService.findOne(categoryId);
@@ -132,4 +133,14 @@ public class CategoryController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/category/status")
+    public boolean changeStatus(@RequestParam Integer categoryId, @RequestParam Integer status) {
+        return categoryService.changeStatus(categoryId, status);
+    }
+
+    @DeleteMapping("/category/delete/{id}")
+    public ResponseEntity deleteCategory(@PathVariable Integer id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.ok().build();
+    }
 }

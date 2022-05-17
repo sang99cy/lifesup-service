@@ -1,8 +1,11 @@
 package me.sunrise.service;
 
 import me.sunrise.entity.OrderMainEntity;
+import me.sunrise.entity.ProductInOrderEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface OrderService {
     Page<OrderMainEntity> findAll(Pageable pageable);
@@ -52,6 +55,10 @@ public interface OrderService {
     OrderMainEntity approved(Long orderId);
 
     OrderMainEntity cancel(Long orderId);
+
+    void deleteOrder(Long orderId);
+
+    List<ProductInOrderEntity> viewDetailOrder(Long orderId);
 
 //    Page<OrderMain> findByStatus1(Integer orderStatus);
 }

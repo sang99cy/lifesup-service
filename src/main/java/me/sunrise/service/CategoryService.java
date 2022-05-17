@@ -27,4 +27,7 @@ Page<CategoryEntity> findAll(Pageable pageable);
 
     List<CategoryEntity> listAllCategory();
 
+    boolean changeStatus(Integer categoryId, Integer status);
+
+    void deleteCategory(Integer id);
 }

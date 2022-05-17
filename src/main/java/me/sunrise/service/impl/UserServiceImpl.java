@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @DependsOn("passwordEncoder")
@@ -95,4 +96,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(pageable);
     }
 
+    @Override
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
+    }
 }

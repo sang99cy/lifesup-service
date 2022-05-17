@@ -1,12 +1,11 @@
 package me.sunrise.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,17 +15,18 @@ import java.util.Date;
 @Table(name = "category")
 public class CategoryEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer categoryId;
 
     private String categoryName;
 
-//    @NaturalId
     private Integer categoryType;
     @CreationTimestamp
     private Date createTime;
     @UpdateTimestamp
     private Date updateTime;
+
+    private Integer status;
 
     public CategoryEntity() {
     }

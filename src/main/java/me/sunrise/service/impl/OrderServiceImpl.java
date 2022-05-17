@@ -19,6 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class OrderServiceImpl implements OrderService {
     @Autowired
@@ -51,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderMainEntity> findstatus3(Pageable pageable) {
         return orderRepository.getOrderStatus3(pageable);
     }
+
     @Override
     public Page<OrderMainEntity> findstatus0(Pageable pageable) {
         return orderRepository.getOrderStatus0(pageable);
@@ -60,38 +64,47 @@ public class OrderServiceImpl implements OrderService {
     public Object[] getcountStautus0() {
         return orderRepository.getcountStatus0();
     }
+
     @Override
     public Object[] getcountStautus1() {
         return orderRepository.getcountStatus1();
     }
+
     @Override
     public Object[] getcountStautus2() {
         return orderRepository.getcountStatus2();
     }
+
     @Override
     public Object[] getcountStautus3() {
         return orderRepository.getcountStatus3();
     }
+
     @Override
     public Object[] getcountAll() {
         return orderRepository.getcountAll();
     }
+
     @Override
     public Object[] getsumStautus0() {
         return orderRepository.getsumStatus0();
     }
+
     @Override
     public Object[] getsumStautus1() {
         return orderRepository.getsumStatus1();
     }
+
     @Override
     public Object[] getsumStautus2() {
         return orderRepository.getsumStatus2();
     }
+
     @Override
     public Object[] getsumStautus3() {
         return orderRepository.getsumStatus3();
     }
+
     @Override
     public Object[] getsumAll() {
         return orderRepository.getsumAll();
@@ -102,7 +115,8 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderMainEntity> findByStatus(Integer status, Pageable pageable) {
         return orderRepository.findAllByOrderStatusOrderByCreateTimeDesc(status, pageable);
     }
-//    @Override
+
+    //    @Override
 //    public Page<OrderMain> findByStatus1(Integer orderStatus, Pageable pageable) {
 //        return orderRepository.findAllByOrderStatusOrderByCreateTimeDesc(orderStatus, pageable);
 //    }
@@ -119,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderMainEntity findOne(Long orderId) {
         OrderMainEntity orderMain = orderRepository.findByOrderId(orderId);
-        if(orderMain == null) {
+        if (orderMain == null) {
             throw new MyException(ResultEnum.ORDER_NOT_FOUND);
         }
         return orderMain;
@@ -129,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderMainEntity finish(Long orderId) {
         OrderMainEntity orderMain = findOne(orderId);
-        if(!orderMain.getOrderStatus().equals(OrderStatusEnum.APPROVED.getCode())) {
+        if (!orderMain.getOrderStatus().equals(OrderStatusEnum.APPROVED.getCode())) {
             throw new MyException(ResultEnum.ORDER_STATUS_ERROR);
         }
 
@@ -142,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderMainEntity approved(Long orderId) {
         OrderMainEntity orderMain = findOne(orderId);
-        if(!orderMain.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
+        if (!orderMain.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
             throw new MyException(ResultEnum.ORDER_STATUS_ERROR);
         }
 
@@ -155,7 +169,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderMainEntity cancel(Long orderId) {
         OrderMainEntity orderMain = findOne(orderId);
-        if(!orderMain.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
+        if (!orderMain.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
             throw new MyException(ResultEnum.ORDER_STATUS_ERROR);
         }
 
@@ -172,5 +186,24 @@ public class OrderServiceImpl implements OrderService {
 //        }
         return orderRepository.findByOrderId(orderId);
 
+    }
+
+
+    @Override
+    @Transactional
+    public void deleteOrder(Long orderId) {
+        List<ProductInOrderEntity> orderDetails = productInOrderRepository.findByOrderId(orderId);
+        if (orderDetails.size() > 0) {
+            for (ProductInOrderEntity orderDetail : orderDetails) {
+                productInOrderRepository.delete(orderDetail);
+            }
+            OrderMainEntity orderOverview = orderRepository.findByOrderId(orderId);
+            orderRepository.delete(orderOverview);
+        }
+    }
+
+    @Override
+    public List<ProductInOrderEntity> viewDetailOrder(Long orderId) {
+        return productInOrderRepository.findByOrderId(orderId);
     }
 }

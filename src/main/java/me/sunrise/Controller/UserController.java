@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -60,7 +61,7 @@ public class UserController {
 
             // Lấy một số thông tin của người dùng khi đăng nhập.
             UserEntity UserEntity = userService.findOne(userDetails.getUsername());
-            return ResponseEntity.ok(new JwtResponse(UserEntity.getId(),jwt, UserEntity.getEmail(), UserEntity.getName(), UserEntity.getRole(), UserEntity.getAddress(),UserEntity.getPhone()));
+            return ResponseEntity.ok(new JwtResponse(UserEntity.getId(), jwt, UserEntity.getEmail(), UserEntity.getName(), UserEntity.getRole(), UserEntity.getAddress(), UserEntity.getPhone()));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -96,10 +97,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users")
+    public ResponseEntity<List<UserEntity>> getALlUser() {
+        return ResponseEntity.ok(userService.findAll());
+    }
+
     @GetMapping("/userList")
     public Page<UserEntity> userList(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                               @RequestParam(value = "size", defaultValue = "3") Integer size,
-                               Authentication authentication) {
+                                     @RequestParam(value = "size", defaultValue = "3") Integer size,
+                                     Authentication authentication) {
         PageRequest request = PageRequest.of(page - 1, size);
         Page<UserEntity> userPage;
 

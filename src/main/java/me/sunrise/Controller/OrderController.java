@@ -22,7 +22,7 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class OrderController {
     @Autowired
     OrderService orderService;
@@ -37,7 +37,7 @@ public class OrderController {
     }
 
     /**
-     * Xoá đơn hàng -> xóa chi tiết đơn hàng trước thông qua orderId sau đó xáo đơn hàng
+     * hủy đơn hàng ->
      */
     @DeleteMapping("/order")
     public void deleteOrder(@PathVariable("orderId") Long orderId) {
@@ -59,6 +59,11 @@ public class OrderController {
     @PostMapping("/order/export")
     public void exportOrder() {
 
+    }
+
+    @GetMapping("/order/status")
+    public boolean changeStatusOrder(@RequestParam Long orderId, @RequestParam Integer status) {
+        return orderService.chuyenTinhTrangDonHang(orderId, status);
     }
 
 
@@ -102,10 +107,10 @@ public class OrderController {
     }
 
     @PatchMapping("/order/approved/{id}")
-    public ResponseEntity<OrderMainEntity> approved(@PathVariable("id") Long orderId, Authentication authentication) {
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<OrderMainEntity> approved(@PathVariable("id") Long orderId) {
+//        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
         return ResponseEntity.ok(orderService.approved(orderId));
     }
 

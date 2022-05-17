@@ -3,10 +3,14 @@ package me.sunrise.service.impl;
 import me.sunrise.dto.DetailOrderDTO;
 import me.sunrise.dto.OrderDTO;
 import me.sunrise.entity.OrderMainEntity;
+import me.sunrise.entity.ProductEnity;
 import me.sunrise.entity.ProductInOrderEntity;
 import me.sunrise.entity.UserEntity;
+import me.sunrise.enums.ResultEnum;
+import me.sunrise.exception.MyException;
 import me.sunrise.repository.OrderRepository;
 import me.sunrise.repository.ProductInOrderRepository;
+import me.sunrise.repository.ProductInfoRepository;
 import me.sunrise.service.ProductInOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,8 @@ public class ProductInOrderServiceImpl extends BaseService implements ProductInO
     ProductInOrderRepository productInOrderRepository;
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    ProductInfoRepository productInfoRepository;
 
     @Override
     @Transactional
@@ -53,14 +59,29 @@ public class ProductInOrderServiceImpl extends BaseService implements ProductInO
     @Override
     @Transactional
     public void checkout(OrderDTO orderDTO) {
-        OrderMainEntity order = super.map(orderDTO,OrderMainEntity.class);
+        OrderMainEntity order = super.map(orderDTO, OrderMainEntity.class);
         OrderMainEntity orderMainEntity = orderRepository.save(order);
         if (orderMainEntity.getOrderId() != null) {
             // luu detail order
             for (DetailOrderDTO detailOrderDTO : orderDTO.getDetailOrders()) {
                 detailOrderDTO.setOrderId(orderMainEntity.getOrderId());
+                /*check so luong sản phẩm mua*/
+                checkSoluongMuavaGiamSLSP(detailOrderDTO.getProductId(),detailOrderDTO.getCount());
+                /*nếu hợp lệ thì giảm số lượng sản phẩm*/
+                /*nếu ko hợp lệ thì sẽ ko cho thanh toán thành công*/
                 productInOrderRepository.save(super.map(detailOrderDTO, ProductInOrderEntity.class));
             }
+        }
+    }
+
+    public void checkSoluongMuavaGiamSLSP(String productId, Integer soluongMua) {
+        ProductEnity productEnity = productInfoRepository.findByProductId(productId);
+        Integer soLuongtrongKho = productEnity.getProductStock();
+        if (soluongMua <= soLuongtrongKho) {
+            productEnity.setProductStock((soLuongtrongKho - soluongMua));
+            productInfoRepository.save(productEnity);
+        } else {
+            throw new MyException(ResultEnum.PRODUCT_NOT_ENOUGH);
         }
     }
 }

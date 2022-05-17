@@ -61,4 +61,6 @@ public interface OrderService {
     List<ProductInOrderEntity> viewDetailOrder(Long orderId);
 
 //    Page<OrderMain> findByStatus1(Integer orderStatus);
+
+    boolean chuyenTinhTrangDonHang(Long orderId,Integer orderStatus);
 }

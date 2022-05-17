@@ -206,4 +206,16 @@ public class OrderServiceImpl implements OrderService {
     public List<ProductInOrderEntity> viewDetailOrder(Long orderId) {
         return productInOrderRepository.findByOrderId(orderId);
     }
+
+    @Override
+    @Transactional
+    public boolean chuyenTinhTrangDonHang(Long orderId, Integer orderStatus) {
+        OrderMainEntity order = orderRepository.findByOrderId(orderId);
+        if(order != null){
+            order.setOrderStatus(orderStatus);
+            orderRepository.save(order);
+            return true;
+        }
+        return false;
+    }
 }

@@ -210,10 +210,23 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public boolean chuyenTinhTrangDonHang(Long orderId, Integer orderStatus) {
+        ProductEnity product;
+        List<ProductInOrderEntity> detailOrders;
         OrderMainEntity order = orderRepository.findByOrderId(orderId);
-        if(order != null){
+        if (order != null) {
             order.setOrderStatus(orderStatus);
-            orderRepository.save(order);
+            OrderMainEntity response = orderRepository.save(order);
+            /*nếu status == 2 trường hợp hủy đơn hàng phải trả về số lượng về cho sản phẩm đó*/
+            if (response.getOrderStatus() == 2) {
+                detailOrders = productInOrderRepository.findByOrderId(orderId);
+                for (ProductInOrderEntity item : detailOrders) {
+                    /*cập nhật lại số lượng khi hủy đơn hàng*/
+                    product = productInfoRepository.findByProductId(item.getProductId());
+                    Integer soluong = product.getProductStock() + item.getCount();
+                    product.setProductStock(soluong);
+                    productInfoRepository.save(product);
+                }
+            }
             return true;
         }
         return false;

@@ -63,6 +63,12 @@ public class OrderMainEntity implements Serializable {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "payment")
+    private Long payment;/*hình thức thanh toán 0 or 1*/
+
+    @Column(name = "comment")
+    private String comment;
+
     public OrderMainEntity(UserEntity buyer) {
         this.buyerEmail = buyer.getEmail();
         this.buyerName = buyer.getName();

@@ -138,4 +138,9 @@ public class ProductController {
         return productService.changeStatus(productId, status);
     }
 
+//    @PostMapping("/product/dosearch")
+//    public List<ProductEnity> dosearch(@RequestParam String keySearch){
+//       retun productServce.
+//    }
+
 }

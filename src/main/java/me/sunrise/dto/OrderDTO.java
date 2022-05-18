@@ -34,5 +34,7 @@ public class OrderDTO {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private Long userId;
+    private Long payment;/*hình thức thanh toán 0 or 1*/
+    private String comment;/*chú thích */
     List<DetailOrderDTO> detailOrders;
 }

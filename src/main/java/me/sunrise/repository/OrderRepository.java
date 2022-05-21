@@ -8,8 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface OrderRepository extends JpaRepository<OrderMainEntity, Long> {
+public interface OrderRepository extends JpaRepository<OrderMainEntity, Long>,StatisticsRepositoryCustom {
     OrderMainEntity findByOrderId(Long orderId);
 
 
@@ -55,8 +57,6 @@ public interface OrderRepository extends JpaRepository<OrderMainEntity, Long> {
     Object[] getsumStatus3();
     @Query("SELECT new map(sum(m.orderAmount) as TONG) FROM OrderMainEntity m WHERE m.orderStatus <> 2 ")
     Object[] getsumAll();
-
-
 
 }
 

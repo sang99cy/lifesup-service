@@ -78,11 +78,9 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<UserEntity> update(@RequestBody UserEntity UserEntity, Principal principal) {
-
+    public ResponseEntity<UserEntity> update(@RequestBody UserEntity user) {
         try {
-            if (!principal.getName().equals(UserEntity.getEmail())) throw new IllegalArgumentException();
-            return ResponseEntity.ok(userService.update(UserEntity));
+            return ResponseEntity.ok(userServiceImpl.update(user));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -93,6 +91,15 @@ public class UserController {
         if (principal.getName().equals(email)) {
             return ResponseEntity.ok(userService.findOne(email));
         } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/profile/changePassword")
+    public ResponseEntity<UserEntity> updatePassword(@RequestParam Long userId, @RequestParam String newPassword, @RequestParam String oldPassword) {
+        try {
+            return ResponseEntity.ok(userService.updatePassword(userId, newPassword, oldPassword));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }

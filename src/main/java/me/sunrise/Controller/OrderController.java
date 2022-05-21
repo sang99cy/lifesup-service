@@ -192,103 +192,62 @@ public class OrderController {
     }
 
     @GetMapping("/order/getCountStatus0")
-    public Object[] getCountStatus0(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getCountStatus0() {
         return orderService.getcountStautus0();
 
     }
 
     @GetMapping("/order/getCountStatus1")
-    public Object[] getCountStatus1(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getCountStatus1() {
         return orderService.getcountStautus1();
 
     }
 
     @GetMapping("/order/getCountStatus2")
-    public Object[] getCountStatus2(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getCountStatus2() {
         return orderService.getcountStautus2();
 
     }
 
     @GetMapping("/order/getCountStatus3")
-    public Object[] getCountStatus3(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getCountStatus3() {
         return orderService.getcountStautus3();
 
     }
 
     @GetMapping("/order/getCountAll")
-    public Object[] getCountAll(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getCountAll() {
         return orderService.getcountAll();
 
     }
 
     @GetMapping("/order/getSumStatus0")
-    public Object[] getSumStatus0(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getSumStatus0() {
         return orderService.getsumStautus0();
 
     }
 
     @GetMapping("/order/getSumStatus1")
-    public Object[] getSumStatus1(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getSumStatus1() {
         return orderService.getsumStautus1();
 
     }
 
     @GetMapping("/order/getSumStatus2")
-    public Object[] getSumStatus2(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getSumStatus2() {
         return orderService.getsumStautus2();
 
     }
 
     @GetMapping("/order/getSumStatus3")
-    public Object[] getSumStatus3(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getSumStatus3() {
         return orderService.getsumStautus3();
 
     }
 
     @GetMapping("/order/getSumAll")
-    public Object[] getSumAll(Authentication authentication) {
-
-        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))) {
-
-        }
+    public Object[] getSumAll() {
         return orderService.getsumAll();
-
     }
 
 }

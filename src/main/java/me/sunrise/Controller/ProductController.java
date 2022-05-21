@@ -1,5 +1,6 @@
 package me.sunrise.Controller;
 
+import me.sunrise.dto.ProductDTO;
 import me.sunrise.entity.ProductEnity;
 import me.sunrise.service.CategoryService;
 import me.sunrise.service.ProductService;
@@ -138,9 +139,9 @@ public class ProductController {
         return productService.changeStatus(productId, status);
     }
 
-//    @PostMapping("/product/dosearch")
-//    public List<ProductEnity> dosearch(@RequestParam String keySearch){
-//       retun productServce.
-//    }
+    @PostMapping("/product/dosearch")
+    public List<ProductDTO> dosearch(@RequestBody ProductDTO keySearch){
+       return productService.doSearchProduct(keySearch);
+    }
 
 }

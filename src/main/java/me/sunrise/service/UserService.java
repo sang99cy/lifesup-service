@@ -25,4 +25,6 @@ public interface UserService {
     Page<UserEntity> findAll(Pageable pageable);
 
     List<UserEntity> findAll();
+
+    UserEntity updatePassword(Long userId,String newPassword,String oldPassword);
 }

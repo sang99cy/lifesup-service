@@ -64,12 +64,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserEntity update(UserEntity UserEntity) {
-        UserEntity oldUser = userRepository.findByEmail(UserEntity.getEmail());
-        oldUser.setPassword(passwordEncoder.encode(UserEntity.getPassword()));
-        oldUser.setName(UserEntity.getName());
-        oldUser.setPhone(UserEntity.getPhone());
-        oldUser.setAddress(UserEntity.getAddress());
+    public UserEntity update(UserEntity user) {
+        UserEntity oldUser = userRepository.findByEmail(user.getEmail());
+        //oldUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        oldUser.setName(user.getName());
+        oldUser.setPhone(user.getPhone());
+        oldUser.setAddress(user.getAddress());
         return userRepository.save(oldUser);
     }
 
@@ -99,5 +99,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserEntity> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserEntity updatePassword(Long userId, String newPassword, String oldPassword) {
+        UserEntity userNew;
+        UserEntity oldUser = userRepository.findById(userId);
+        if (passwordEncoder.matches(oldPassword, oldUser.getPassword())) {
+            System.out.println("true");
+            oldUser.setPassword(passwordEncoder.encode(newPassword));
+            userNew = userRepository.save(oldUser);
+            return userNew;
+        }else{
+            System.out.println("false");
+        }
+        return null;
     }
 }

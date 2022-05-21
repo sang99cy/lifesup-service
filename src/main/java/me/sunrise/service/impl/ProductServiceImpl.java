@@ -1,6 +1,7 @@
 package me.sunrise.service.impl;
 
 
+import me.sunrise.dto.ProductDTO;
 import me.sunrise.entity.ProductEnity;
 import me.sunrise.enums.ProductStatusEnum;
 import me.sunrise.enums.ResultEnum;
@@ -166,5 +167,10 @@ public class ProductServiceImpl implements ProductService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<ProductDTO> doSearchProduct(ProductDTO keySearch) {
+        return productInfoRepository.doSearchProduct(keySearch);
     }
 }

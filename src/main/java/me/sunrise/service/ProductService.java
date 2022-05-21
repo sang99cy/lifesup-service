@@ -1,6 +1,7 @@
 package me.sunrise.service;
 
 
+import me.sunrise.dto.ProductDTO;
 import me.sunrise.entity.ProductEnity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,4 +48,6 @@ public interface ProductService {
     void delete(String productId);
 
     boolean changeStatus(String productId,Integer status);
+
+    List<ProductDTO> doSearchProduct(ProductDTO keySearch);
 }

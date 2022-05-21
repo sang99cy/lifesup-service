@@ -37,4 +37,9 @@ public class OrderDTO {
     private Long payment;/*hình thức thanh toán 0 or 1*/
     private String comment;/*chú thích */
     List<DetailOrderDTO> detailOrders;
+
+
+    public OrderDTO(Long orderId) {
+        this.orderId = orderId;
+    }
 }

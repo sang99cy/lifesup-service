@@ -49,7 +49,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public StatisticsDTO thongkeDoanhThuTheoQuy(Long type) {
+    public List<StatisticsDTO> thongkeDoanhThuTheoQuy(Long type) {
         return orderRepository.thongkeDoanhThuTheoQuy(type);
     }
 

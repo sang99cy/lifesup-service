@@ -59,7 +59,7 @@ public class StatisticsRepositoryCustomImpl implements StatisticsRepositoryCusto
                 "FROM\n" +
                 "\torder_main om\n" +
                 "WHERE\n" +
-                "\tom.create_time between concat(curdate(), ' ', '00:00:00') AND concat(curdate(), ' ', '23:59:59'); ");
+                "\tom.create_time between concat(curdate(), ' ', '00:00:00') AND concat(curdate(), ' ', '23:59:59') ");
         List<StatisticsDTO> query = em.createNativeQuery(sql.toString(), "countOrderCunrrentDate").getResultList();
         Long count = query.get(0).getSoLuong();
         return count;
@@ -73,7 +73,7 @@ public class StatisticsRepositoryCustomImpl implements StatisticsRepositoryCusto
                 "FROM\n" +
                 "\torder_main om\n" +
                 "WHERE\n" +
-                "\tMONTH(om.create_time) = MONTH(CURRENT_DATE()); ");
+                "\tMONTH(om.create_time) = MONTH(CURRENT_DATE()) ");
         List<StatisticsDTO> query = em.createNativeQuery(sql.toString(), "countOrderCunrrentDate").getResultList();
         Long count = query.get(0).getSoLuong();
         return count;
@@ -88,7 +88,8 @@ public class StatisticsRepositoryCustomImpl implements StatisticsRepositoryCusto
                 "FROM\n" +
                 "\torder_main om\n" +
                 "WHERE\n" +
-                "\tom.create_time between concat(curdate(), ' ', '00:00:00') AND concat(curdate(), ' ', '23:59:59'); ");
+                "om.order_status = 3 " +
+                "\tand om.create_time between concat(curdate(), ' ', '00:00:00') AND concat(curdate(), ' ', '23:59:59') ");
         StatisticsDTO query = (StatisticsDTO) em.createNativeQuery(sql.toString(), "sumSalesCunrrentDate").getSingleResult();
         return query;
     }
@@ -101,16 +102,17 @@ public class StatisticsRepositoryCustomImpl implements StatisticsRepositoryCusto
                 "\tcount(om.order_id) soLuong\n" +
                 "FROM\n" +
                 "\torder_main om\n" +
-                "WHERE\n" +
-                "\tMONTH(om.create_time) = MONTH(CURRENT_DATE()); ");
+                "WHERE \n" +
+                "om.order_status = 3 " +
+                "\tand MONTH(om.create_time) = MONTH(CURRENT_DATE()); ");
         StatisticsDTO query = (StatisticsDTO) em.createNativeQuery(sql.toString(), "sumSalesCunrrentDate").getSingleResult();
         return query;
     }
 
 
     @Override
-    public StatisticsDTO thongkeDoanhThuTheoQuy(Long type) {
-        StatisticsDTO query = null;
+    public List<StatisticsDTO> thongkeDoanhThuTheoQuy(Long type) {
+        List<StatisticsDTO> query = null;
         StringBuilder sql = new StringBuilder("");
         if (type == 0) {
             sql.append(" SELECT \n" +
@@ -128,7 +130,7 @@ public class StatisticsRepositoryCustomImpl implements StatisticsRepositoryCusto
                     "\t    WHEN MONTH(om.create_time) BETWEEN 7 and 9 then 3\n" +
                     "\t    ELSE 4\n" +
                     "\tEND))");
-            query = (StatisticsDTO) em.createNativeQuery(sql.toString(), "sumSalesByQuater").getSingleResult();
+            query = em.createNativeQuery(sql.toString(), "sumSalesByQuater").getResultList();
         }
         if (type == 1) {
             sql.append(" SELECT \n" +
@@ -146,7 +148,7 @@ public class StatisticsRepositoryCustomImpl implements StatisticsRepositoryCusto
                     "\t    WHEN MONTH(om.create_time) BETWEEN 7 and 9 then 3\n" +
                     "\t    ELSE 4\n" +
                     "\tEND))");
-            query = (StatisticsDTO) em.createNativeQuery(sql.toString(), "countSalesByQuater").getSingleResult();
+            query = em.createNativeQuery(sql.toString(), "countSalesByQuater").getResultList();
         }
         return query;
     }
@@ -166,7 +168,9 @@ public class StatisticsRepositoryCustomImpl implements StatisticsRepositoryCusto
         if (Objects.nonNull(timeDto.getCreateTo())) {
             sql.append("and om.create_time <= STR_TO_DATE('" + timeDto.getCreateTo() + "','%Y-%m-%d %H:%i:%s') ");
         }
+        sql.append("and om.order_status = 3 ");
         sql.append("group by ngay; ");
+        System.out.println(sql.toString());
         statistics = em.createNativeQuery(sql.toString(), "sumSalesByCreateFormTo").getResultList();
         return statistics;
     }

@@ -18,7 +18,7 @@ public interface StatisticsRepositoryCustom {
 
     StatisticsDTO thongkeDoanhThuThangnay();
 
-    StatisticsDTO thongkeDoanhThuTheoQuy(Long type);
+    List<StatisticsDTO> thongkeDoanhThuTheoQuy(Long type);
 
     List<StatisticsDTO> thongKeDoanhthuHangNgay(TimeDto timeDto);
 }

@@ -15,7 +15,9 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,8 +33,8 @@ public class OrderDTO {
     private String buyerAddress;
     private BigDecimal orderAmount;
     private Integer orderStatus;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
+    private Date createTime;
+    private Date updateTime;
     private Long userId;
     private Long payment;/*hình thức thanh toán 0 or 1*/
     private String comment;/*chú thích */

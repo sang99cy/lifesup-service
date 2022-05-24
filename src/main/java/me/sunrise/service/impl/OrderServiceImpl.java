@@ -210,6 +210,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public boolean chuyenTinhTrangDonHang(Long orderId, Integer orderStatus) {
+        /*0 chờ xác nhận*/
+        /*1 là */
         ProductEnity product;
         List<ProductInOrderEntity> detailOrders;
         OrderMainEntity order = orderRepository.findByOrderId(orderId);
@@ -217,18 +219,42 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus(orderStatus);
             OrderMainEntity response = orderRepository.save(order);
             /*nếu status == 2 trường hợp hủy đơn hàng phải trả về số lượng về cho sản phẩm đó*/
-            if (response.getOrderStatus() == 2) {
-                detailOrders = productInOrderRepository.findByOrderId(orderId);
-                for (ProductInOrderEntity item : detailOrders) {
-                    /*cập nhật lại số lượng khi hủy đơn hàng*/
-                    product = productInfoRepository.findByProductId(item.getProductId());
-                    Integer soluong = product.getProductStock() + item.getCount();
-                    product.setProductStock(soluong);
-                    productInfoRepository.save(product);
-                }
+            switch (orderStatus){
+                case 0:
+                    System.out.println("chờ xác nhận");
+                    break;
+                case 1:
+                    System.out.println("duyệt và giao hàng");
+                    break;
+                case 2:
+                    System.out.println("hủy đơn hàng");
+                    if (response.getOrderStatus() == 2) {
+                        detailOrders = productInOrderRepository.findByOrderId(orderId);
+                        for (ProductInOrderEntity item : detailOrders) {
+                            /*cập nhật lại số lượng khi hủy đơn hàng*/
+                            product = productInfoRepository.findByProductId(item.getProductId());
+                            Integer soluong = product.getProductStock() + item.getCount();
+                            product.setProductStock(soluong);
+                            productInfoRepository.save(product);
+                        }
+                    }
+                    break;
+                default:
+                    System.out.println("hoàn thành đơn hàng");
+                    break;
             }
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<OrderMainEntity> getListOrderByUser(Long userId) {
+        return null;
+    }
+
+    @Override
+    public List<OrderMainEntity> getOrderByUserId(Long userId) {
+        return orderRepository.findAllByUserId(userId);
     }
 }

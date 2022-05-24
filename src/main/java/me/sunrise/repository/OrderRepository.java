@@ -58,5 +58,8 @@ public interface OrderRepository extends JpaRepository<OrderMainEntity, Long>,St
     @Query("SELECT new map(sum(m.orderAmount) as TONG) FROM OrderMainEntity m WHERE m.orderStatus <> 2 ")
     Object[] getsumAll();
 
+
+    List<OrderMainEntity> findAllByUserId(Long userId);
+
 }
 

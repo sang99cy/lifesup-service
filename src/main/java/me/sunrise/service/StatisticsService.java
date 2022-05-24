@@ -19,7 +19,7 @@ public interface StatisticsService {
 
     StatisticsDTO thongkeDoanhThuThangnay();
 
-    StatisticsDTO thongkeDoanhThuTheoQuy(Long type);
+    List<StatisticsDTO> thongkeDoanhThuTheoQuy(Long type);
 
     List<StatisticsDTO> thongkeDoanhthuHangNgay(TimeDto timeDto);
 }

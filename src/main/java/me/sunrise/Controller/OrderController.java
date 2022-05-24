@@ -61,6 +61,13 @@ public class OrderController {
 
     }
 
+    /** get don hang theo userId
+    */
+    @GetMapping("/orders/orderUser")
+    public List<OrderMainEntity> getOrderByUserId(@RequestParam Long userId){
+        return orderService.getOrderByUserId(userId);
+    }
+
     @GetMapping("/order/status")
     public boolean changeStatusOrder(@RequestParam Long orderId, @RequestParam Integer status) {
         return orderService.chuyenTinhTrangDonHang(orderId, status);

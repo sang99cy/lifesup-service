@@ -41,8 +41,10 @@ public class ProductInfoRepositoryCustomImpl implements ProductInfoRepositoryCus
         }
 
         if (Objects.nonNull(dto.getProductName())) {
-            sql.append("and lower(p.product_name) like :productName ESCAPE '&' \n");
-            params.put("productName", DataUtil.makeLikeParam(dto.getProductName()));
+            if(!dto.getProductName().equals("")){
+                sql.append("and lower(p.product_name) like :productName ESCAPE '&' \n");
+                params.put("productName", DataUtil.makeLikeParam(dto.getProductName()));
+            }
         }
 
         if (Objects.nonNull(dto.getProductPrice())) {

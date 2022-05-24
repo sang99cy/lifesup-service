@@ -14,8 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -25,7 +30,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     CategoryService categoryService;
-
+    public final static String url = System.getProperty("user.dir");
+    private final String UPLOAD_CONFIG = "upload-config.properties";
 
     @Override
     public Page<ProductEnity> under25(Pageable pageable) {
@@ -77,7 +83,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductEnity> findAll() {
-        return productInfoRepository.findAll();
+        List<ProductEnity> products = productInfoRepository.findAll();
+        return products;
     }
 
     @Override
@@ -172,5 +179,44 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> doSearchProduct(ProductDTO keySearch) {
         return productInfoRepository.doSearchProduct(keySearch);
+    }
+
+    @Override
+    public String uploadProduct(MultipartFile image) {
+        Properties properties = new Properties();
+        try {
+            properties.load(getClass().getClassLoader().getResourceAsStream(UPLOAD_CONFIG));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String pathFile = properties.getProperty("uploadServer");
+        String fileName = image.getOriginalFilename();
+        File mkDir = new File(pathFile);
+        if (!mkDir.exists()) {
+            mkDir.mkdirs();
+        }
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            File newFile = new File(pathFile, fileName);
+            inputStream = image.getInputStream();
+            outputStream = new FileOutputStream(newFile);
+
+            int read;
+            byte[] bytes = new byte[1024];
+            while ((read = inputStream.read(bytes, 0, 1024)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return fileName;
     }
 }

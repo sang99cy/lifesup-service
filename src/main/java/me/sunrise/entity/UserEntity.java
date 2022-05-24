@@ -10,7 +10,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-/**thông tin tài khoản*/
+
+/**
+ * thông tin tài khoản
+ */
 @Entity
 @Data
 @Table(name = "users")
@@ -36,12 +39,14 @@ public class UserEntity implements Serializable {
     private boolean active;
     @NotEmpty
     private String role = "ROLE_CUSTOMER";
-
+    @Column(name = "avatar")
+    private String avatar;
 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore  // fix bi-direction toString() recursion problem
     private Cart cart;
+
     @Override
     public String toString() {
         return "User{" +

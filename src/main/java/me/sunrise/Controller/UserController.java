@@ -16,9 +16,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -61,7 +63,7 @@ public class UserController {
 
             // Lấy một số thông tin của người dùng khi đăng nhập.
             UserEntity UserEntity = userService.findOne(userDetails.getUsername());
-            return ResponseEntity.ok(new JwtResponse(UserEntity.getId(), jwt, UserEntity.getEmail(), UserEntity.getName(), UserEntity.getRole(), UserEntity.getAddress(), UserEntity.getPhone()));
+            return ResponseEntity.ok(new JwtResponse(UserEntity.getId(), jwt, UserEntity.getEmail(), UserEntity.getName(), UserEntity.getRole(), UserEntity.getAddress(), UserEntity.getPhone(), UserEntity.getAvatar()));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -141,4 +143,11 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/uploadAvatar")
+    public UserEntity upLoadImageUser(@RequestParam("image") MultipartFile image, Long userId) {
+        return userService.updaLoadAvatar(image,userId);
+    }
+
+
 }

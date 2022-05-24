@@ -1,9 +1,11 @@
 package me.sunrise.Controller;
 
 import me.sunrise.dto.ProductDTO;
+import me.sunrise.dto.request.ProductRequest;
 import me.sunrise.entity.ProductEnity;
 import me.sunrise.service.CategoryService;
 import me.sunrise.service.ProductService;
+import me.sunrise.service.impl.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,14 +13,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @CrossOrigin
 @RestController
-public class ProductController {
+public class ProductController extends BaseService {
     @Autowired
     CategoryService categoryService;
     @Autowired
@@ -77,7 +82,6 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     @PutMapping("/seller/product/{id}/edit")
     public ResponseEntity edit(@PathVariable("id") String productId,
@@ -140,8 +144,45 @@ public class ProductController {
     }
 
     @PostMapping("/product/dosearch")
-    public List<ProductDTO> dosearch(@RequestBody ProductDTO keySearch){
-       return productService.doSearchProduct(keySearch);
+    public List<ProductDTO> dosearch(@RequestBody ProductDTO keySearch) {
+        return productService.doSearchProduct(keySearch);
+    }
+
+    @RequestMapping(value = "/products/newUpload", method = RequestMethod.POST)
+    public ResponseEntity<?> addProduct(@RequestBody ProductEnity product) {
+        System.out.println("requets "+ product.toString());
+        try {
+            // upload image tra ve ten anh de luu product
+            String uniqueID = UUID.randomUUID().toString();
+            product.setProductId(uniqueID);
+            ProductEnity returnedProduct = productService.save(product);
+            System.out.println("dsfs" + returnedProduct);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/products/uploadImage", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+    public Map<String,Object> uploadImageProduct(@RequestParam("file") MultipartFile image){
+        Map<String,Object> map =new HashMap<>();
+        String imageName = productService.uploadProduct(image);
+        map.put("imageName",imageName);
+        return map;
+    }
+
+    @RequestMapping(value = "/products/editUpload", method = RequestMethod.POST)
+    public ResponseEntity<?> editProduct(@RequestBody ProductRequest product) {
+        try {
+            if (product.getProductId() != null) {
+                // upload image tra ve ten anh de luu product
+                ProductEnity returnedProduct = productService.save(super.map(product,ProductEnity.class));
+                System.out.println("update product" + returnedProduct);
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import me.sunrise.dto.ProductDTO;
 import me.sunrise.entity.ProductEnity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -50,4 +51,6 @@ public interface ProductService {
     boolean changeStatus(String productId,Integer status);
 
     List<ProductDTO> doSearchProduct(ProductDTO keySearch);
+
+    String uploadProduct(MultipartFile image);
 }

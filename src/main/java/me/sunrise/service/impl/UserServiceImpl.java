@@ -15,9 +15,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 @DependsOn("passwordEncoder")
@@ -28,6 +31,9 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     CartRepository cartRepository;
+
+    public final static String url = System.getProperty("user.dir");
+    private final String UPLOAD_CONFIG = "upload-config.properties";
 
     @Override
     public UserEntity findOne(String email) {
@@ -110,9 +116,59 @@ public class UserServiceImpl implements UserService {
             oldUser.setPassword(passwordEncoder.encode(newPassword));
             userNew = userRepository.save(oldUser);
             return userNew;
-        }else{
+        } else {
             System.out.println("false");
         }
         return null;
     }
+
+    @Override
+    public UserEntity updaLoadAvatar(MultipartFile image, Long userId) {
+        UserEntity response = null;
+        Properties properties = new Properties();
+        try {
+            properties.load(getClass().getClassLoader().getResourceAsStream(UPLOAD_CONFIG));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //String pathFile = properties.getProperty("fileImage");
+        String pathFile = properties.getProperty("uploadServer");
+        UserEntity user = userRepository.findById(userId);
+        if (user != null) {
+            // upload anh
+            String fileName = image.getOriginalFilename();
+            File mkDir = new File(pathFile);
+            if (!mkDir.exists()) {
+                mkDir.mkdirs();
+            }
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            try {
+                File newFile = new File(pathFile, fileName);
+                inputStream = image.getInputStream();
+                outputStream = new FileOutputStream(newFile);
+
+                int read;
+                byte[] bytes = new byte[1024];
+                while ((read = inputStream.read(bytes, 0, 1024)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    inputStream.close();
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            // save ten anh
+            user.setAvatar(fileName);
+            response = userRepository.save(user);
+            return response;
+        }
+        return null;
+    }
+
 }

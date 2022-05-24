@@ -68,7 +68,8 @@ public class StatisticsController {
      * thống kê doanh thu hàng ngày hiển thị lên chart hàng ngày
      */
     @PostMapping("/sumOrder/createFromTo")
-    public List<StatisticsDTO> thongkeDoanhThuHangNgay(TimeDto timeDto) {
+    public List<StatisticsDTO> thongkeDoanhThuHangNgay(@RequestBody TimeDto timeDto) {
+        System.out.println("thong ke doanh thu hang ngay" + timeDto.toString() );
         return statisticsService.thongkeDoanhthuHangNgay(timeDto);
     }
 
@@ -76,10 +77,11 @@ public class StatisticsController {
      * Thống kê doanh thu or số lượng theo quý
      */
     @GetMapping("/sumCountOrder/quarter")
-    public StatisticsDTO thongkeDoanhThuOrSoluongTheoQuy(@RequestParam Long type) {
+    public List<StatisticsDTO> thongkeDoanhThuOrSoluongTheoQuy(@RequestParam Long type) {
         // 0 doanh thu theo quy
         // 1 don hang thoe quy
-        return statisticsService.thongkeDoanhThuTheoQuy(type);
+        List<StatisticsDTO> statics = statisticsService.thongkeDoanhThuTheoQuy(type);
+        return statics;
     }
 
 }

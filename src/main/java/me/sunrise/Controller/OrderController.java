@@ -61,6 +61,11 @@ public class OrderController {
 
     }
 
+    @GetMapping("/orderMain")
+    public OrderMainEntity getOrderBYOrderId(@RequestParam Long orderId){
+        return orderService.getOrderByOrderId(orderId);
+    }
+
     /** get don hang theo userId
     */
     @GetMapping("/orders/orderUser")

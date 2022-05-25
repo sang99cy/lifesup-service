@@ -26,6 +26,7 @@ public class CommentServiceImpl extends BaseService implements CommentService {
 
     @Override
     public CommentEntity save(CommentEntity comment) {
+        comment.setStatus(1L);
         return commentRepository.save(comment);
     }
 

@@ -1,6 +1,7 @@
 package me.sunrise.service;
 
 import me.sunrise.dto.OrderDTO;
+import me.sunrise.entity.OrderMainEntity;
 import me.sunrise.entity.ProductInOrderEntity;
 import me.sunrise.entity.UserEntity;
 
@@ -11,5 +12,5 @@ public interface ProductInOrderService {
     ProductInOrderEntity findOne(String itemId, UserEntity UserEntity);
     void saveProductInOrder(List<ProductInOrderEntity> productInOrders);
 
-    void checkout(OrderDTO orderDTO);
+    OrderMainEntity checkout(OrderDTO orderDTO);
 }

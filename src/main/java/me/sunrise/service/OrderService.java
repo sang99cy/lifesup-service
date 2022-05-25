@@ -67,4 +67,6 @@ public interface OrderService {
     List<OrderMainEntity> getListOrderByUser(Long userId);
 
     List<OrderMainEntity> getOrderByUserId(Long userId);
+
+    OrderMainEntity getOrderByOrderId(Long orderId);
 }

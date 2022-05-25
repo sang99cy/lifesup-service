@@ -58,7 +58,7 @@ public class ProductInOrderServiceImpl extends BaseService implements ProductInO
 
     @Override
     @Transactional
-    public void checkout(OrderDTO orderDTO) {
+    public OrderMainEntity checkout(OrderDTO orderDTO) {
         OrderMainEntity order = super.map(orderDTO, OrderMainEntity.class);
         OrderMainEntity orderMainEntity = orderRepository.save(order);
         if (orderMainEntity.getOrderId() != null) {
@@ -72,6 +72,7 @@ public class ProductInOrderServiceImpl extends BaseService implements ProductInO
                 productInOrderRepository.save(super.map(detailOrderDTO, ProductInOrderEntity.class));
             }
         }
+        return orderMainEntity;
     }
 
     public void checkSoluongMuavaGiamSLSP(String productId, Integer soluongMua) {

@@ -23,7 +23,6 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-
     tomcat:
       initial-size: 15
       max-wait: 20000:50

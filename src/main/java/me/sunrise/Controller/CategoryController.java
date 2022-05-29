@@ -143,4 +143,18 @@ public class CategoryController {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/categories/aonam")
+    public List<CategoryEntity> listDanhMucAoNam(@RequestParam Integer status, @RequestParam Integer categoryType) {
+        // status hiển thị hay ẩn
+        // categoryType để xác định thuộc danh mục nào
+        return categoryService.findAllByStatusAndCategoryTypeInOrderByCreateTimeDesc(0, categoryType);
+    }
+
+    @GetMapping("/categories/quannam")
+    public List<CategoryEntity> listDanhMucQuanNam(@RequestParam Integer status, @RequestParam Integer categoryType) {
+        // status hiển thị hay ẩn
+        // categoryType để xác định thuộc danh mục nào ( 0: ao nam; 1: quan nam)
+        return categoryService.findAllByStatusAndCategoryTypeInOrderByCreateTimeDesc(0, categoryType);
+    }
 }

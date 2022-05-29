@@ -21,6 +21,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository productCategoryRepository;
     @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
     CategoryService categoryService;
 
     @Override
@@ -55,7 +57,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         // if null throw exception
 //        categoryService.findByCategoryType(category.getCategoryType());
-        category.setCategoryType(0);
         category.setStatus(0);
         return productCategoryRepository.save(category);
     }
@@ -94,5 +95,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void deleteCategory(Integer id) {
         productCategoryRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CategoryEntity> findAllByStatusAndCategoryTypeInOrderByCreateTimeDesc(Integer status, Integer categoryType) {
+        return categoryRepository.listCategoryAoNam(status,categoryType);
     }
 }

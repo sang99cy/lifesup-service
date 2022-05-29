@@ -10,7 +10,7 @@ public interface CategoryService {
 
 //    List<ProductCategory> findAll();
 //
-Page<CategoryEntity> findAll(Pageable pageable);
+    Page<CategoryEntity> findAll(Pageable pageable);
 
 
     CategoryEntity findOne(Integer categoryId);
@@ -30,4 +30,7 @@ Page<CategoryEntity> findAll(Pageable pageable);
     boolean changeStatus(Integer categoryId, Integer status);
 
     void deleteCategory(Integer id);
+
+    List<CategoryEntity> findAllByStatusAndCategoryTypeInOrderByCreateTimeDesc(Integer status,Integer categoryType);
+
 }

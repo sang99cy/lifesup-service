@@ -2,6 +2,7 @@ package me.sunrise.Controller;
 
 import me.sunrise.dto.ProductDTO;
 import me.sunrise.dto.request.ProductRequest;
+import me.sunrise.dto.request.SearchRequest;
 import me.sunrise.entity.ProductEnity;
 import me.sunrise.service.CategoryService;
 import me.sunrise.service.ProductService;
@@ -9,6 +10,9 @@ import me.sunrise.service.impl.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -33,11 +37,36 @@ public class ProductController extends BaseService {
      * Show All Categories
      */
 
-    @GetMapping("/product")
-    public Page<ProductEnity> findAll(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                      @RequestParam(value = "size", defaultValue = "3") Integer size) {
-        PageRequest request = PageRequest.of(page - 1, size);
-        return productService.findAll(request);
+//    @GetMapping("/product")
+//    public Page<ProductEnity> findAll(@RequestParam(value = "page", defaultValue = "1") Integer page,
+//                                      @RequestParam(value = "size", defaultValue = "3") Integer size) {
+//        PageRequest request = PageRequest.of(page - 1, size);
+//        return productService.findAll(request);
+//    }
+    @PostMapping("/products/page")
+    public ResponseEntity<?> pageProducts(@RequestBody SearchRequest keySearch,
+                                          @RequestParam(value = "page") Integer page,
+                                          @RequestParam("size") Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createTime").descending());
+        Page<ProductEnity> productPage = productService.findAll(keySearch.getKeySearch(), pageable);
+        if (productPage.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(productPage, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("products/page")
+    public ResponseEntity<?> pageProductByCategory(@RequestParam Integer categoryType,
+                                                   @RequestParam(value = "page") Integer page,
+                                                   @RequestParam("size") Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createTime").descending());
+        Page<ProductEnity> productPage = productService.findAllPageCategory(categoryType, pageable);
+        if (productPage.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(productPage, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/products")
@@ -150,7 +179,7 @@ public class ProductController extends BaseService {
 
     @RequestMapping(value = "/products/newUpload", method = RequestMethod.POST)
     public ResponseEntity<?> addProduct(@RequestBody ProductEnity product) {
-        System.out.println("requets "+ product.toString());
+        System.out.println("requets " + product.toString());
         try {
             // upload image tra ve ten anh de luu product
             String uniqueID = UUID.randomUUID().toString();
@@ -164,10 +193,10 @@ public class ProductController extends BaseService {
     }
 
     @RequestMapping(value = "/products/uploadImage", method = RequestMethod.POST, consumes = {"multipart/form-data"})
-    public Map<String,Object> uploadImageProduct(@RequestParam("file") MultipartFile image){
-        Map<String,Object> map =new HashMap<>();
+    public Map<String, Object> uploadImageProduct(@RequestParam("file") MultipartFile image) {
+        Map<String, Object> map = new HashMap<>();
         String imageName = productService.uploadProduct(image);
-        map.put("imageName",imageName);
+        map.put("imageName", imageName);
         return map;
     }
 
@@ -176,7 +205,7 @@ public class ProductController extends BaseService {
         try {
             if (product.getProductId() != null) {
                 // upload image tra ve ten anh de luu product
-                ProductEnity returnedProduct = productService.save(super.map(product,ProductEnity.class));
+                ProductEnity returnedProduct = productService.save(super.map(product, ProductEnity.class));
                 System.out.println("update product" + returnedProduct);
             }
             return new ResponseEntity<>(HttpStatus.OK);

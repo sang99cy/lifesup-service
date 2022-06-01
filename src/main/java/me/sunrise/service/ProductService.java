@@ -27,7 +27,8 @@ public interface ProductService {
     // All selling products
     Page<ProductEnity> findUpAll(Pageable pageable);
     // All products
-    Page<ProductEnity> findAll(Pageable pageable);
+    Page<ProductEnity> findAll(String productName,Pageable pageable);
+    Page<ProductEnity> findAllPageCategory(Integer categoryType, Pageable pageable);
     // All products in a category
     Page<ProductEnity> findAllInCategory(Integer categoryType, Pageable pageable);
 

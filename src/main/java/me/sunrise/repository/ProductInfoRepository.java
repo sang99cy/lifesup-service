@@ -13,6 +13,9 @@ public interface ProductInfoRepository extends JpaRepository<ProductEnity, Strin
     // onsale product
     Page<ProductEnity> findAllByProductStatusOrderByProductIdAsc(Integer productStatus, Pageable pageable);
 
+    Page<ProductEnity> findAllByProductNameContaining(String productName, Pageable pageable);
+    Page<ProductEnity> findAllByCategoryType(Integer categoryType, Pageable pageable);
+
     // product in one category
     Page<ProductEnity> findAllByCategoryTypeOrderByProductIdAsc(Integer categoryType, Pageable pageable);
 

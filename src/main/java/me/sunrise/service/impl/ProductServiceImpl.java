@@ -72,8 +72,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductEnity> findAll(Pageable pageable) {
-        return productInfoRepository.findAllByOrderByProductId(pageable);
+    public Page<ProductEnity> findAll(String productName, Pageable pageable) {
+        if (productName == null) {
+            return productInfoRepository.findAll(pageable);
+        }
+        return productInfoRepository.findAllByProductNameContaining(productName, pageable);
+    }
+
+    public Page<ProductEnity> findAllPageCategory(Integer categoryType, Pageable pageable){
+        return productInfoRepository.findAllByCategoryType(categoryType, pageable);
     }
 
     @Override

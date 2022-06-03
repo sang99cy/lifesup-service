@@ -18,6 +18,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .addResourceHandler("/**")
                 .addResourceLocations("/resources/","classpath:/static/")
                 .addResourceLocations("D:\\DATN\\shopper-backend\\src\\main\\resources\\static")
+                .addResourceLocations("D:\\DATN\\shopper-backend\\target\\classes\\static")
                 .setCachePeriod(3600)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());

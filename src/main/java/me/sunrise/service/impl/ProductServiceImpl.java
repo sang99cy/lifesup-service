@@ -90,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductEnity> findAll() {
-        List<ProductEnity> products = productInfoRepository.findAll();
+        List<ProductEnity> products = productInfoRepository.findAllByOrderByCreateTimeAsc();
         return products;
     }
 
@@ -156,6 +156,7 @@ public class ProductServiceImpl implements ProductService {
 //        if(productInfo.getProductStatus() > 1) {
 //            throw new MyException(ResultEnum.PRODUCT_STATUS_ERROR);
 //        }
+        productInfo.setProductStatus(1);
         return productInfoRepository.save(productInfo);
     }
 

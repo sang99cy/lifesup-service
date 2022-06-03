@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProductInfoRepository extends JpaRepository<ProductEnity, String>,ProductInfoRepositoryCustom {
     ProductEnity findByProductId(String id);
@@ -30,4 +32,7 @@ public interface ProductInfoRepository extends JpaRepository<ProductEnity, Strin
     Page<ProductEnity>from100to200(Pageable pageable);
     @Query("SELECT m FROM ProductEnity m WHERE m.productPrice > 200  ")
     Page<ProductEnity>above200(Pageable pageable);
+
+
+    List<ProductEnity> findAllByOrderByCreateTimeAsc();
 }

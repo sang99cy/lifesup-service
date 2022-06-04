@@ -138,7 +138,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(UserEntity));
     }
 
-    @DeleteMapping("/delete/UserEntity/{id}")
+    @DeleteMapping("/user/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
@@ -149,5 +149,10 @@ public class UserController {
         return userService.updaLoadAvatar(image,userId);
     }
 
+    @GetMapping("/user/detail/{id}")
+    public ResponseEntity detail(@PathVariable("id") Long id) {
+        UserEntity userEntity = userService.findUserById(id);
+        return ResponseEntity.ok(userEntity);
+    }
 
 }

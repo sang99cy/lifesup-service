@@ -21,7 +21,7 @@ public class ShopApiApplication {
 
     @PostConstruct
     void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC+07:00"));
     }
 
 

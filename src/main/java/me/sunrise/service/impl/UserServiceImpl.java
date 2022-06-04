@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 @Service
@@ -42,7 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity findUserById(Long id) {
-        return userRepository.findById(id);
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new MyException(ResultEnum.PRODUCT_NOT_EXIST));
+        return user;
     }
 
     @Override
@@ -89,7 +92,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserEntity updateUser(UserEntity UserEntity) {
-        UserEntity oldUser = userRepository.findById(UserEntity.getId());
+        UserEntity oldUser = userRepository.findById(UserEntity.getId())
+                .orElseThrow(() -> new MyException(ResultEnum.USER_NOT_EXIST));
         oldUser.setPassword(passwordEncoder.encode(UserEntity.getPassword()));
         oldUser.setName(UserEntity.getName());
         oldUser.setPhone(UserEntity.getPhone());
@@ -110,7 +114,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity updatePassword(Long userId, String newPassword, String oldPassword) {
         UserEntity userNew;
-        UserEntity oldUser = userRepository.findById(userId);
+        UserEntity oldUser = userRepository.findById(userId)
+                .orElseThrow(() -> new MyException(ResultEnum.USER_NOT_EXIST));
         if (passwordEncoder.matches(oldPassword, oldUser.getPassword())) {
             System.out.println("true");
             oldUser.setPassword(passwordEncoder.encode(newPassword));
@@ -133,7 +138,8 @@ public class UserServiceImpl implements UserService {
         }
         //String pathFile = properties.getProperty("fileImage");
         String pathFile = properties.getProperty("uploadServer");
-        UserEntity user = userRepository.findById(userId);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new MyException(ResultEnum.USER_NOT_EXIST));
         if (user != null) {
             // upload anh
             String fileName = image.getOriginalFilename();

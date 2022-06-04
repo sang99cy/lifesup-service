@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test SSe</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+ <script>
+
+     $(document).ready(function () {
+         var urlEndpoint = "http://localhost:8080/api/subscribe";
+         var eventSource = new EventSource(urlEndpoint);
+         // addEventListener version
+         eventSource.addEventListener('error', (e) => {
+             console.log("An error occurred while attempting to connect.");
+         });
+
+// onerror version
+         eventSource.onerror = (e) => {
+             console.log("An error occurred while attempting to connect.");
+         };
+     })
+ </script>
+</body>
+</html>

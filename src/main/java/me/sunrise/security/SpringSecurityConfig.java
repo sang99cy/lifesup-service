@@ -1,5 +1,6 @@
 package me.sunrise.security;
 
+import com.google.common.collect.ImmutableList;
 import me.sunrise.security.JWT.JwtEntryPoint;
 import me.sunrise.security.JWT.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;

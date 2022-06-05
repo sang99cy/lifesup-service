@@ -5,7 +5,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: admin1234
-    url: jdbc:mysql://localhost:3306/ecomerce_prod?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    #103.226.248.168
+    url: jdbc:mysql://103.226.248.168:3306/ecomerce_prod?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     #DB o cong ty
     #spring:
     #  datasource:
